@@ -1,0 +1,22 @@
+# Hasil Pengujian Chapter 7 — SisaBaik API
+
+## 1. Lingkungan Pengujian
+
+- Aplikasi: SisaBaik API
+- Teknologi: Node.js, Express, dan PostgreSQL
+- Database: `sisabaik_dev`
+- Branch Git: `feature/rest-postgresql`
+
+## 2. Hasil Pengujian
+
+| No. | Pengujian                                                        | Hasil                                                                    |
+| --- | ---------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| 1   | Pemeriksaan koneksi database menggunakan `npm run db:check -- 0` | Berhasil                                                                 |
+| 2   | Pemeriksaan endpoint `/api/health`                               | Berhasil                                                                 |
+| 3   | Pengujian konkurensi pemesanan saat stok terbatas                | Berhasil; satu permintaan berhasil dan satu ditolak, dengan stok akhir 0 |
+
+## 3. Kesimpulan
+
+Berdasarkan pengujian yang telah dilakukan, koneksi database, pemeriksaan kesehatan aplikasi, dan pengujian konkurensi pemesanan telah berhasil dijalankan sesuai hasil yang tercatat.
+
+Dokumentasi endpoint tersedia pada `docs/API.md`.
