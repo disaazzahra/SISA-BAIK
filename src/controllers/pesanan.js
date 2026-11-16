@@ -1,36 +1,36 @@
-import pg from "pg";
+import * as service from "../services/pesanan.js";
+import { idValid, halamanValid } from "../lib/api.js";
+import { pesananSesiValid, aksiPesananValid } from "../lib/input-auth.js";
 
-const { Pool } = pg;
-const produksi = process.env.NODE_ENV === "production";
-const ssl = process.env.PGSSL ?? "disable";
-if (!["disable", "require"].includes(ssl)) {
-  throw new Error("PGSSL wajib disable atau require.");
+export async function daftar(req, res) {
+  const hasil = await service.daftarPesanan(
+    halamanValid(req.query),
+    req.pengguna,
+  );
+  return res.json({ success: true, ...hasil });
 }
-const databaseLokal = ["localhost", "127.0.0.1"].includes(
-  process.env.PGHOST,
-);
-if (produksi && !databaseLokal && ssl !== "require") {
-  throw new Error("Database jarak jauh pada production wajib PGSSL=require.");
+export async function detail(req, res) {
+  const hasil = await service.detailPesanan(
+    idValid(req.params.id),
+    req.pengguna,
+  );
+  return res.json({ success: true, data: hasil });
 }
-for (const nama of [
-  "PGHOST",
-  "PGPORT",
-  "PGDATABASE",
-  "PGUSER",
-  "PGPASSWORD",
-]) {
-  if (!process.env[nama])
-    throw new Error(`Konfigurasi ${nama} belum diisi.`);
+export async function buat(req, res) {
+  const hasil = await service.buatPesanan(
+    pesananSesiValid(req.body, req.pengguna),
+    req.pengguna,
+  );
+  return res
+    .status(201)
+    .location(`/api/pesanan/${hasil.id}`)
+    .json({ success: true, data: hasil });
 }
-
-export const pool = new Pool({
-  ssl: ssl === "require" ? { rejectUnauthorized: true } : false,
-  max: 5,
-  connectionTimeoutMillis: 15000,
-  idleTimeoutMillis: 10000,
-  statement_timeout: 10000,
-});
-
-pool.on("error", (error) => {
-  console.error("Koneksi idle bermasalah:", error.code ?? "DB_ERROR");
-});
+export async function aksi(req, res) {
+  const hasil = await service.prosesPesanan(
+    idValid(req.params.id),
+    aksiPesananValid(req.body),
+    req.pengguna,
+  );
+  return res.json({ success: true, data: hasil });
+}
