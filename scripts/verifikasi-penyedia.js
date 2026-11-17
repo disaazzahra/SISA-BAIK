@@ -78,11 +78,18 @@ if (
         "Gunakan: npm run penyedia:verifikasi -- email@domain.com [--tolak]",
       );
     ({ pool } = await import("../src/db/pool.js"));
-    const db = await pool.query(
-      "SELECT current_database() AS nama,(SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()) AS tls",
-    );
-    if (db.rows[0].nama !== tujuan || (cloud && !db.rows[0].tls))
-      throw new Error("Database tujuan atau TLS tidak sesuai.");
+    const client = await pool.connect();
+    try {
+      const db = await client.query("SELECT current_database() AS nama");
+
+      const socket = client.connection.stream;
+      const tls = socket?.encrypted === true && socket?.authorized === true;
+
+      if (db.rows[0].nama !== tujuan || (cloud && !tls))
+        throw new Error("Database tujuan atau TLS tidak sesuai.");
+    } finally {
+      client.release();
+    }
     const r = await verifikasiPenyedia(
       pool,
       args[0],

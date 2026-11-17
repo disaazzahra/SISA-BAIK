@@ -1,0 +1,104 @@
+
+> sisabaik-api@1.6.0 workflow:test
+> node --env-file=.env scripts/uji-alur-transaksi.js
+
+POST /api/auth/login 200 497ms
+POST /api/auth/login 200 482ms
+POST /api/auth/login 200 459ms
+POST /api/auth/login 200 451ms
+POST /api/penawaran 201 16ms
+PASS penawaran tanpa foto menggunakan fallback dan versi awal
+POST /api/pesanan 201 49ms
+PASS reservasi mengurangi stok sekali dan memakai harga server
+POST /api/pesanan/34/aksi 403 7ms
+PASS pembeli tidak dapat menerima pesanan sendiri
+POST /api/pesanan/34/aksi 404 4ms
+GET /api/pesanan/34 404 4ms
+POST /api/pesanan/34/aksi 404 4ms
+PASS penyedia dan pembeli lain tidak dapat mengakses pesanan
+POST /api/pesanan/34/aksi 200 9ms
+PASS pembatalan pembeli sebelum konfirmasi mengembalikan stok
+POST /api/pesanan/34/aksi 409 4ms
+PASS pengulangan pembatalan tidak mengembalikan stok dua kali
+POST /api/pesanan 201 9ms
+POST /api/pesanan/35/aksi 200 8ms
+PASS penolakan penyedia tercatat dan memulihkan reservasi
+POST /api/pesanan 201 11ms
+POST /api/pesanan/36/aksi 409 4ms
+POST /api/pesanan/36/aksi 200 7ms
+POST /api/pesanan/36/aksi 409 4ms
+POST /api/pesanan/36/aksi 409 3ms
+PASS konfirmasi membatasi pembatalan pembeli tanpa mengurangi stok lagi
+POST /api/pesanan/36/aksi 200 10ms
+POST /api/pesanan/36/aksi 400 3ms
+GET /api/dashboard 200 8ms
+PASS pesanan siap belum menjadi pendapatan atau pengambilan
+POST /api/pesanan/36/aksi 200 7ms
+PASS serah terima berbayar mencatat pembayaran dan pengambilan secara atomik
+POST /api/pesanan/36/aksi 409 3ms
+POST /api/pesanan/36/aksi 409 3ms
+PASS pesanan selesai tidak dapat diselesaikan atau dibatalkan ulang
+POST /api/penawaran 201 5ms
+POST /api/pesanan 201 10ms
+POST /api/pesanan/37/aksi 200 5ms
+POST /api/pesanan/37/aksi 200 8ms
+POST /api/pesanan/37/aksi 200 7ms
+PASS makanan gratis selesai tanpa menambah pendapatan
+GET /api/dashboard 200 4ms
+GET /api/dashboard 200 5ms
+PASS dashboard menghitung belanja, diskon, unit, nilai normal dan pembatalan tepat
+GET /api/dashboard 200 7ms
+PASS dashboard usaha lain tetap nol
+POST /api/penawaran 201 10ms
+GET /api/penawaran/31/foto 200 2ms
+PASS foto PNG diproses sebagai WebP dan terlayani dari database
+POST /api/penawaran 400 2ms
+POST /api/penawaran 400 2ms
+PASS SVG dan berkas palsu ditolak tanpa penawaran parsial
+PUT /api/penawaran/31 404 5ms
+PUT /api/penawaran/31 400 2ms
+PUT /api/penawaran/31 200 5ms
+PASS edit tanpa foto baru mempertahankan foto yang sudah ada
+PUT /api/penawaran/31 200 6ms
+PASS edit hanya untuk pemilik dan foto dapat dikembalikan ke default
+POST /api/pesanan 201 9ms
+PUT /api/penawaran/31 409 4ms
+GET /api/penawaran/milik-saya 200 6ms
+PUT /api/penawaran/31 200 4ms
+GET /api/pesanan/38 200 5ms
+PASS edit usang ditolak; riwayat nama, harga dan satuan tidak mengikuti edit baru
+POST /api/pesanan/38/aksi 200 5ms
+POST /api/pesanan/38/aksi 200 9ms
+PASS penyedia boleh membatalkan setelah konfirmasi dan memulihkan stok
+POST /api/pesanan 201 10ms
+POST /api/pesanan/39/aksi 200 7ms
+POST /api/pesanan/39/aksi 200 5ms
+POST /api/pesanan/39/aksi 200 8ms
+PASS penyedia membatalkan pesanan siap dan menutup pengambilan
+POST /api/pesanan 201 7ms
+POST /api/pesanan/40/aksi 200 8ms
+POST /api/pesanan/40/aksi 409 75ms
+GET /api/pesanan/40 200 16ms
+PASS konfirmasi dan pembatalan bersamaan menghasilkan satu keputusan yang sah
+POST /api/pesanan/40/aksi 200 14ms
+POST /api/penawaran 201 8ms
+POST /api/pesanan 201 12ms
+POST /api/pesanan/41/aksi 200 10ms
+GET /api/penawaran/32 404 2ms
+PASS pemulihan stok kedaluwarsa tidak menampilkan makanan kembali ke katalog
+POST /api/penawaran 201 6ms
+POST /api/pesanan 201 15ms
+POST /api/pesanan 409 16ms
+PASS dua permintaan untuk stok terakhir menghasilkan satu reservasi
+POST /api/pesanan/42/aksi 200 9ms
+POST /api/pesanan/42/aksi 409 9ms
+GET /api/penawaran/33 200 1ms
+PASS dua pembatalan memulihkan stok sekali dan mengaktifkan stok habis
+GET /api/dashboard 200 6ms
+POST /api/pesanan 201 14ms
+POST /api/pesanan 201 10ms
+POST /api/pesanan 201 9ms
+GET /api/pesanan 200 4ms
+GET /api/dashboard 200 5ms
+PASS dashboard mencakup semua halaman tanpa menghitung reservasi sebagai pendapatan
+26 skenario alur transaksi lulus. Fixture pengujian sudah dihapus.
